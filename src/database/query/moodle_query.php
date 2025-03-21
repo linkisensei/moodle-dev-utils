@@ -117,14 +117,15 @@ class moodle_query {
      * @param string $type JOIN type (INNER, LEFT, RIGHT)
      * @param string $table Table to join
      * @param string $on_condition ON condition for join
+     * @param string $alias
      * @return static
      * @throws coding_exception if FROM clause is not set
      */
-    protected function join(string $type, string $table, string $on_condition): static {
+    protected function join(string $type, string $table, string $on_condition, string $alias = ''): static {
         if (!$this->from) {
             throw new coding_exception("Cannot JOIN without FROM clause");
         }
-        $this->joins[] = "$type JOIN {{$table}} ON ($on_condition)";
+        $this->joins[] = "$type JOIN {{$table}} $alias ON ($on_condition)";
         return $this;
     }
 
@@ -133,10 +134,11 @@ class moodle_query {
      *
      * @param string $table
      * @param string $on_condition
+     * @param string $alias
      * @return static
      */
-    public function inner_join(string $table, string $on_condition): static {
-        return $this->join('INNER', $table, $on_condition);
+    public function inner_join(string $table, string $on_condition, string $alias = ''): static {
+        return $this->join('INNER', $table, $on_condition, $alias);
     }
 
     /**
@@ -144,10 +146,11 @@ class moodle_query {
      *
      * @param string $table
      * @param string $on_condition
+     * @param string $alias
      * @return static
      */
-    public function left_join(string $table, string $on_condition): static {
-        return $this->join('LEFT', $table, $on_condition);
+    public function left_join(string $table, string $on_condition, string $alias = ''): static {
+        return $this->join('LEFT', $table, $on_condition, $alias);
     }
 
     /**
@@ -155,10 +158,11 @@ class moodle_query {
      *
      * @param string $table
      * @param string $on_condition
+     * @param string $alias
      * @return static
      */
-    public function right_join(string $table, string $on_condition): static {
-        return $this->join('RIGHT', $table, $on_condition);
+    public function right_join(string $table, string $on_condition, string $alias = ''): static {
+        return $this->join('RIGHT', $table, $on_condition, $alias);
     }
 
     /**
@@ -274,7 +278,7 @@ class moodle_query {
      * @param string $key Parameter placeholder name
      * @param mixed $value Value associated with the placeholder
      */
-    protected function set_param(string $key, mixed $value): void {
+    public function set_param(string $key, mixed $value): void {
         $this->params[$key] = $value;
     }
 
@@ -283,7 +287,7 @@ class moodle_query {
      *
      * @param array $params Associative array of parameters (key => value)
      */
-    protected function set_params(array $params): void {
+    public function set_params(array $params): void {
         $this->params = array_merge($this->params, $params);
     }
 
