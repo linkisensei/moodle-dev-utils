@@ -107,7 +107,7 @@ class moodle_query {
      * @return static
      */
     public function from(string $table, string $alias = ''): static {
-        $this->from = $alias ? "$table $alias" : $table;
+        $this->from = $alias ? "{{$table}} $alias" : "{{$table}}";
         return $this;
     }
 
@@ -124,7 +124,7 @@ class moodle_query {
         if (!$this->from) {
             throw new coding_exception("Cannot JOIN without FROM clause");
         }
-        $this->joins[] = "$type JOIN $table ON ($on_condition)";
+        $this->joins[] = "$type JOIN {{$table}} ON ($on_condition)";
         return $this;
     }
 
