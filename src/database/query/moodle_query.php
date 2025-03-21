@@ -35,11 +35,11 @@ class moodle_query {
     /** @var array ORDER BY clauses */
     protected array $order_by = [];
 
-    /** @var int|null Query result limit */
-    protected ?int $limit = null;
+    /** @var int Query result limit */
+    protected int $limit = 0;
 
-    /** @var int|null Query result offset */
-    protected ?int $offset = null;
+    /** @var int Query result offset */
+    protected int $offset = 0;
 
     /** @var array Query parameters for prepared statements */
     protected array $params = [];
@@ -335,7 +335,7 @@ class moodle_query {
      * @return moodle_recordset The resulting set of records
      */
     public function get_recordset(): moodle_recordset {
-        return $this->db->get_recordset_sql($this->to_sql(), $this->params, $this->offset ?? 0, $this->limit ?? 0);
+        return $this->db->get_recordset_sql($this->to_sql(), $this->params, $this->offset, $this->limit);
     }
 
     /**
@@ -346,6 +346,7 @@ class moodle_query {
     public function count(): int {
         $query = clone $this;
         $query->select('COUNT(1)', true);
+        $query->limit(0, 0);
         return $this->db->count_records_sql($query->to_sql(), $query->params);
     }
 
@@ -372,5 +373,19 @@ class moodle_query {
         $record = $recordset->current();
         $recordset->close();
         return $record ?: null;
+    }
+
+
+    /**
+     * @param string $name Property name
+     * @return mixed Property value
+     * @throws \ErrorException if property does not exist
+     */
+    public function __get(string $name): mixed {
+        if(property_exists($this, $name)){
+            return $this->$name;
+        }
+    
+        throw new \ErrorException("Property {$name} does not exist");
     }
 }
