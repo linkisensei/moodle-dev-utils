@@ -1,0 +1,21 @@
+{
+    "name": "linkisensei/moodle-dev-utils",
+    "description": "Collection of classes and functions to be used in Moodle plugins. This library does not follow the PSR-1 Basic Coding Standard so it better interacts with Moodle Coding Standards",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "linkisensei\\moodle_dev_utils\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Lucas Barreto",
+            "homepage": "https://github.com/linkisensei"
+        }
+    ],
+    "require": {},
+    "suggest": {
+        "moodle/moodle": "This package is intended to be used within a Moodle environment as it depends on classes provided by Moodle."
+    }
+}
