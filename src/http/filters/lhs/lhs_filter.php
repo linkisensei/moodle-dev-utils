@@ -5,9 +5,14 @@ use \Psr\Http\Message\ServerRequestInterface;
 use \linkisensei\moodle_dev_utils\http\filters\interfaces\sql_filter_interface;
 use \linkisensei\moodle_dev_utils\http\filters\lhs\conditions\eq_sql_condition;
 use \linkisensei\moodle_dev_utils\http\filters\lhs\conditions\sql_conditions_factory;
-use \linkisensei\moodle_dev_utils\http\filters\exception\forbidden_operator_exception;
+use \linkisensei\moodle_dev_utils\http\filters\exceptions\forbidden_operator_exception;
+use \linkisensei\moodle_dev_utils\http\filters\exceptions\context\filter_context;
 
-class generic_lhs_filter implements sql_filter_interface {
+/**
+ * Parses LHS Bracket filters and transforms them into
+ * sql conditions.
+ */
+class lhs_filter implements sql_filter_interface {
     protected array $conditions = [];
     protected static array $definition_cache = [];
 
@@ -95,10 +100,7 @@ class generic_lhs_filter implements sql_filter_interface {
         $definitions = $this->get_fields_definition();
         if(!empty($definitions) && isset($definitions[$field])){
             if(!in_array($operator_alias, $definitions[$field]['operators'])){
-                $ctx = [
-                    'field' => $field,
-                    'operator' => $operator_alias,
-                ];
+                $ctx = new filter_context($field, $operator_alias);
                 throw forbidden_operator_exception::new()->set_context($ctx);
             }
 

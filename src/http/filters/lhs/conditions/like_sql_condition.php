@@ -1,6 +1,7 @@
 <?php namespace linkisensei\moodle_dev_utils\http\filters\lhs\conditions;
 
-use \linkisensei\moodle_dev_utils\http\filters\exception\invalid_condition_value_exception;
+use \linkisensei\moodle_dev_utils\http\filters\exceptions\invalid_condition_value_exception;
+
 
 class like_sql_condition extends abstract_sql_condition {
 
@@ -8,7 +9,7 @@ class like_sql_condition extends abstract_sql_condition {
         $this->key = $field . '__' . static::get_alias();
 
         if(!str_contains($value, '%')){
-            throw invalid_condition_value_exception::new()->set_context(['field' => $field]);
+            throw invalid_condition_value_exception::new()->set_context($this->get_context());
         }
 
         $this->value = $value;

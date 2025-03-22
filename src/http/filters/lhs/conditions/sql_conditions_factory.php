@@ -11,7 +11,8 @@ use \linkisensei\moodle_dev_utils\http\filters\lhs\conditions\isnull_sql_conditi
 use \linkisensei\moodle_dev_utils\http\filters\lhs\conditions\notnull_sql_condition;
 use \linkisensei\moodle_dev_utils\http\filters\lhs\conditions\like_sql_condition;
 
-use linkisensei\moodle_dev_utils\http\filters\exception\forbidden_operator_exception;
+use linkisensei\moodle_dev_utils\http\filters\exception\invalid_operator_exception;
+use \linkisensei\moodle_dev_utils\http\filters\exceptions\context\filter_context;
 
 final class sql_conditions_factory {
 
@@ -33,8 +34,13 @@ final class sql_conditions_factory {
             isnull_sql_condition::get_alias()  => isnull_sql_condition::class,
             notnull_sql_condition::get_alias() => notnull_sql_condition::class,
             like_sql_condition::get_alias()  => like_sql_condition::class,
-            default                    => throw forbidden_operator_exception::new()->set_context(['operator' => $operator_alias]),
+            default                    => null,
         };
+
+        if($class === null){
+            $ctx = new filter_context($field, $operator_alias);
+            throw invalid_operator_exception::new()->set_context($ctx);
+        }
 
         return new $class($field, $value);
     }

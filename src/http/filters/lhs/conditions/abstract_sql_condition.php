@@ -3,7 +3,8 @@
 use \invalid_parameter_exception;
 use linkisensei\moodle_dev_utils\http\exceptions\validation_exception;
 use linkisensei\moodle_dev_utils\http\filters\exception\invalid_condition_choice_exception;
-use \linkisensei\moodle_dev_utils\http\filters\exception\missing_required_field_exception;
+use \linkisensei\moodle_dev_utils\http\filters\exceptions\missing_required_field_exception;
+use \linkisensei\moodle_dev_utils\http\filters\exceptions\context\filter_context;
 
 abstract class abstract_sql_condition implements sql_condition_interface {
 
@@ -15,7 +16,11 @@ abstract class abstract_sql_condition implements sql_condition_interface {
     public function __construct(string $field, mixed $value = null){
         $this->key = $field . '__' . static::get_alias();
         $this->value = $value;
-        $this->field = $field;
+        $this->field = $field;            
+    }
+
+    protected function get_context() : filter_context {
+        return new filter_context($this->field, $this->get_alias());
     }
 
     /**
@@ -110,7 +115,8 @@ abstract class abstract_sql_condition implements sql_condition_interface {
             $value = $this->value;
 
             if($value === null && $required && $default === null){
-                throw missing_required_field_exception::new()->set_context(['field' => $this->field]);
+                $ctx = $this->get_context();
+                throw missing_required_field_exception::new()->set_context($ctx);
             }
     
             if($value === null && $required && $default !== null){
@@ -126,10 +132,7 @@ abstract class abstract_sql_condition implements sql_condition_interface {
             }
     
             if (!empty($choices) && !in_array($value, $choices)) {
-                $ctx = [
-                    'field' => $this->field,
-                    'choices' => implode(', ', $choices),
-                ];
+                $ctx = new filter_context($this->field, $this->get_alias(), $choices);
                 throw invalid_condition_choice_exception::new()->set_context($ctx);
             }
     
