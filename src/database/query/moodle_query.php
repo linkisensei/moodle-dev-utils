@@ -15,7 +15,7 @@ class moodle_query {
     protected bool $distinct = false;
 
     /** @var array List of fields to select */
-    protected array $fields = ['*'];
+    protected array $fields = [];
 
     /** @var string FROM clause */
     protected string $from = '';
@@ -306,7 +306,7 @@ class moodle_query {
         if ($this->distinct) {
             $select .= 'DISTINCT ';
         }
-        $select .= implode(', ', $this->fields);
+        $select .= implode(', ', $this->fields ?: ['*']);
 
         $sql = [$select, 'FROM ' . $this->from];
 

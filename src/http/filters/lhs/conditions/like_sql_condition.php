@@ -7,13 +7,12 @@ class like_sql_condition extends abstract_sql_condition {
 
     public function __construct(string $field, mixed $value = null){
         $this->key = $field . '__' . static::get_alias();
+        $this->value = $value;
+        $this->field = $field;
 
         if(!str_contains($value, '%')){
             throw invalid_condition_value_exception::new()->set_context($this->get_context());
         }
-
-        $this->value = $value;
-        $this->field = $field;
     }
 
     /**

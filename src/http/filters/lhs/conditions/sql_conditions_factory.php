@@ -11,7 +11,7 @@ use \moodle_dev_utils\http\filters\lhs\conditions\isnull_sql_condition;
 use \moodle_dev_utils\http\filters\lhs\conditions\notnull_sql_condition;
 use \moodle_dev_utils\http\filters\lhs\conditions\like_sql_condition;
 
-use moodle_dev_utils\http\filters\exception\invalid_operator_exception;
+use moodle_dev_utils\http\filters\exceptions\invalid_operator_exception;
 use \moodle_dev_utils\http\filters\exceptions\context\filter_context;
 
 final class sql_conditions_factory {

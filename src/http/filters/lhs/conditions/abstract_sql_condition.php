@@ -2,7 +2,7 @@
 
 use \invalid_parameter_exception;
 use moodle_dev_utils\http\exceptions\validation_exception;
-use moodle_dev_utils\http\filters\exception\invalid_condition_choice_exception;
+use moodle_dev_utils\http\filters\exceptions\invalid_condition_choice_exception;
 use \moodle_dev_utils\http\filters\exceptions\missing_required_field_exception;
 use \moodle_dev_utils\http\filters\exceptions\context\filter_context;
 
@@ -102,8 +102,8 @@ abstract class abstract_sql_condition implements sql_condition_interface {
      * a cleaned version
      *
      * @throws moodle_dev_utils\http\exceptions\validation_exception
-     * @throws moodle_dev_utils\http\filters\exception\invalid_condition_choice_exception
-     * @throws moodle_dev_utils\http\filters\exception\missing_required_field_exception
+     * @throws moodle_dev_utils\http\filters\exceptions\invalid_condition_choice_exception
+     * @throws moodle_dev_utils\http\filters\exceptions\missing_required_field_exception
      * @param string $type like PARAM_RAW, PARAM_INT etc
      * @param bool $required
      * @param mixed $default
@@ -136,7 +136,7 @@ abstract class abstract_sql_condition implements sql_condition_interface {
                 throw invalid_condition_choice_exception::new()->set_context($ctx);
             }
     
-            $this->value = validate_param($value, $type, !$required);
+            $this->value = validate_param($value, $type, !$required) ?? $default;
 
         } catch (invalid_parameter_exception $ex) {
             throw new validation_exception($ex->getMessage());
