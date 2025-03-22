@@ -1,0 +1,51 @@
+<?php namespace linkisensei\moodle_dev_utils\http\filters\lhs\conditions;
+
+use \linkisensei\moodle_dev_utils\http\filters\exception\invalid_condition_value_exception;
+
+class like_sql_condition extends abstract_sql_condition {
+
+    public function __construct(string $field, mixed $value = null){
+        $this->key = $field . '__' . static::get_alias();
+
+        if(!str_contains($value, '%')){
+            throw invalid_condition_value_exception::new()->set_context(['field' => $field]);
+        }
+
+        $this->value = $value;
+        $this->field = $field;
+    }
+
+    /**
+     * Converts the condition into a sql expression
+     *
+     * @param string $table
+     * @return string
+     */
+    public function to_sql(string $table = '') : string {
+        global $DB;
+
+        if(!isset($this->sql)){
+            $this->sql = $DB->sql_like($this->field, ":$this->key");
+        }
+        return empty($table) ? $this->sql : $table . "." . $this->sql;
+    }
+    
+    /**
+     * Returns the alias operator (to be used in query params)
+     *
+     * @return string
+     */
+    public static function get_alias() : string {
+        return 'like';
+    }
+
+    /**
+     * Returns the real sql operator
+     *
+     * @return string
+     */
+    public function get_operator() : string {
+        return 'LIKE';
+    }
+
+}

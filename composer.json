@@ -14,7 +14,9 @@
             "homepage": "https://github.com/linkisensei"
         }
     ],
-    "require": {},
+    "require": {
+        "psr/http-message": "^2.0"
+    },
     "suggest": {
         "moodle/moodle": "This package is intended to be used within a Moodle environment as it depends on classes provided by Moodle."
     }
