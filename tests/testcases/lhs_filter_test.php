@@ -126,4 +126,58 @@ class lhs_filter_test extends advanced_testcase {
         $this->assertStringContainsString("age = :{$placeholder}", $sql);
         $this->assertEquals(99, $params[$placeholder]);
     }
+
+    public function test_multiple_fields_generate_combined_sql_and_params() {
+        $params = [
+            'age' => ['gt' => 20],
+            'status' => ['eq' => 'draft']
+        ];
+    
+        $filter = $this->get_test_filter($params);
+    
+        $sql = $filter->get_conditions('u');
+        $query_params = $filter->get_parameters();
+    
+        $this->assertStringContainsString('u.age > :age__gt', $sql);
+        $this->assertStringContainsString('u.status = :status__eq', $sql);
+        $this->assertStringContainsString('AND', $sql);
+    
+        $this->assertArrayHasKey('age__gt', $query_params);
+        $this->assertArrayHasKey('status__eq', $query_params);
+        $this->assertEquals(20, $query_params['age__gt']);
+        $this->assertEquals('draft', $query_params['status__eq']);
+    }
+    
+    public function test_field_definition_cache_is_used_across_instances() {
+        $classname = new class([]) extends lhs_filter {
+            protected static int $define_field_calls_counter = 0;
+    
+            public function __construct(array $query_params = []) {
+                parent::__construct($query_params);
+            }
+    
+            protected function define_fields(): array {
+                self::$define_field_calls_counter++;
+                return [
+                    'id' => [
+                        'type' => PARAM_INT,
+                        'operators' => ['eq']
+                    ]
+                ];
+            }
+
+            public function get_define_field_calls_count() : int {
+                return self::$define_field_calls_counter;
+            }
+        };
+    
+        $instance1 = clone $classname;
+        $instance1->set_condition('eq', 'id', 1);
+        $this->assertEquals(1, $instance1->get_define_field_calls_count());
+
+        $instance2 = clone $classname;
+        $instance2->set_condition('eq', 'id', 2);
+        $this->assertEquals(1, $instance2->get_define_field_calls_count(), "Instance2 should have reused the definition of instance1");
+    }
+
 }
