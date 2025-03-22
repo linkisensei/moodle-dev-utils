@@ -1,10 +1,10 @@
-<?php namespace linkisensei\moodle_dev_utils\http\filters\lhs\conditions;
+<?php namespace moodle_dev_utils\http\filters\lhs\conditions;
 
 use \invalid_parameter_exception;
-use linkisensei\moodle_dev_utils\http\exceptions\validation_exception;
-use linkisensei\moodle_dev_utils\http\filters\exception\invalid_condition_choice_exception;
-use \linkisensei\moodle_dev_utils\http\filters\exceptions\missing_required_field_exception;
-use \linkisensei\moodle_dev_utils\http\filters\exceptions\context\filter_context;
+use moodle_dev_utils\http\exceptions\validation_exception;
+use moodle_dev_utils\http\filters\exception\invalid_condition_choice_exception;
+use \moodle_dev_utils\http\filters\exceptions\missing_required_field_exception;
+use \moodle_dev_utils\http\filters\exceptions\context\filter_context;
 
 abstract class abstract_sql_condition implements sql_condition_interface {
 
@@ -101,9 +101,9 @@ abstract class abstract_sql_condition implements sql_condition_interface {
      * Validates the parameter value and updates its with
      * a cleaned version
      *
-     * @throws linkisensei\moodle_dev_utils\http\exceptions\validation_exception
-     * @throws linkisensei\moodle_dev_utils\http\filters\exception\invalid_condition_choice_exception
-     * @throws linkisensei\moodle_dev_utils\http\filters\exception\missing_required_field_exception
+     * @throws moodle_dev_utils\http\exceptions\validation_exception
+     * @throws moodle_dev_utils\http\filters\exception\invalid_condition_choice_exception
+     * @throws moodle_dev_utils\http\filters\exception\missing_required_field_exception
      * @param string $type like PARAM_RAW, PARAM_INT etc
      * @param bool $required
      * @param mixed $default

@@ -1,12 +1,12 @@
-<?php namespace linkisensei\moodle_dev_utils\http\filters\lhs;
+<?php namespace moodle_dev_utils\http\filters\lhs;
 
 use \Psr\Http\Message\ServerRequestInterface;
 
-use \linkisensei\moodle_dev_utils\http\filters\interfaces\sql_filter_interface;
-use \linkisensei\moodle_dev_utils\http\filters\lhs\conditions\eq_sql_condition;
-use \linkisensei\moodle_dev_utils\http\filters\lhs\conditions\sql_conditions_factory;
-use \linkisensei\moodle_dev_utils\http\filters\exceptions\forbidden_operator_exception;
-use \linkisensei\moodle_dev_utils\http\filters\exceptions\context\filter_context;
+use \moodle_dev_utils\http\filters\interfaces\sql_filter_interface;
+use \moodle_dev_utils\http\filters\lhs\conditions\eq_sql_condition;
+use \moodle_dev_utils\http\filters\lhs\conditions\sql_conditions_factory;
+use \moodle_dev_utils\http\filters\exceptions\forbidden_operator_exception;
+use \moodle_dev_utils\http\filters\exceptions\context\filter_context;
 
 /**
  * Parses LHS Bracket filters and transforms them into

@@ -1,6 +1,6 @@
-<?php namespace linkisensei\moodle_dev_utils\http\filters\lhs\conditions;
+<?php namespace moodle_dev_utils\http\filters\lhs\conditions;
 
-use \linkisensei\moodle_dev_utils\http\filters\exceptions\invalid_condition_value_exception;
+use \moodle_dev_utils\http\filters\exceptions\invalid_condition_value_exception;
 
 
 class like_sql_condition extends abstract_sql_condition {

@@ -1,4 +1,4 @@
-<?php namespace linkisensei\moodle_dev_utils\http\filters\exceptions\context;
+<?php namespace moodle_dev_utils\http\filters\exceptions\context;
 
 class filter_context{
     public string $field;

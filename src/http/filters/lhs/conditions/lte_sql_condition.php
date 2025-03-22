@@ -1,4 +1,4 @@
-<?php namespace linkisensei\moodle_dev_utils\http\filters\lhs\conditions;
+<?php namespace moodle_dev_utils\http\filters\lhs\conditions;
 
 class lte_sql_condition extends abstract_sql_condition {
     

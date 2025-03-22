@@ -1,4 +1,4 @@
-<?php namespace linkisensei\moodle_dev_utils\database\query\interfaces;
+<?php namespace moodle_dev_utils\database\query\interfaces;
 
 interface cursor_paginator_interface extends paginator_interface {
 

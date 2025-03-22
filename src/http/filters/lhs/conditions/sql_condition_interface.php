@@ -1,4 +1,4 @@
-<?php namespace linkisensei\moodle_dev_utils\http\filters\lhs\conditions;
+<?php namespace moodle_dev_utils\http\filters\lhs\conditions;
 
 interface sql_condition_interface {
 

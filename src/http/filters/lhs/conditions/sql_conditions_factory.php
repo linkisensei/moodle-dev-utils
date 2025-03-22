@@ -1,23 +1,23 @@
-<?php namespace linkisensei\moodle_dev_utils\http\filters\lhs\conditions;
+<?php namespace moodle_dev_utils\http\filters\lhs\conditions;
 
-use \linkisensei\moodle_dev_utils\http\filters\lhs\conditions\sql_condition_interface;
-use \linkisensei\moodle_dev_utils\http\filters\lhs\conditions\eq_sql_condition;
-use \linkisensei\moodle_dev_utils\http\filters\lhs\conditions\neq_sql_condition;
-use \linkisensei\moodle_dev_utils\http\filters\lhs\conditions\gt_sql_condition;
-use \linkisensei\moodle_dev_utils\http\filters\lhs\conditions\gte_sql_condition;
-use \linkisensei\moodle_dev_utils\http\filters\lhs\conditions\lt_sql_condition;
-use \linkisensei\moodle_dev_utils\http\filters\lhs\conditions\lte_sql_condition;
-use \linkisensei\moodle_dev_utils\http\filters\lhs\conditions\isnull_sql_condition;
-use \linkisensei\moodle_dev_utils\http\filters\lhs\conditions\notnull_sql_condition;
-use \linkisensei\moodle_dev_utils\http\filters\lhs\conditions\like_sql_condition;
+use \moodle_dev_utils\http\filters\lhs\conditions\sql_condition_interface;
+use \moodle_dev_utils\http\filters\lhs\conditions\eq_sql_condition;
+use \moodle_dev_utils\http\filters\lhs\conditions\neq_sql_condition;
+use \moodle_dev_utils\http\filters\lhs\conditions\gt_sql_condition;
+use \moodle_dev_utils\http\filters\lhs\conditions\gte_sql_condition;
+use \moodle_dev_utils\http\filters\lhs\conditions\lt_sql_condition;
+use \moodle_dev_utils\http\filters\lhs\conditions\lte_sql_condition;
+use \moodle_dev_utils\http\filters\lhs\conditions\isnull_sql_condition;
+use \moodle_dev_utils\http\filters\lhs\conditions\notnull_sql_condition;
+use \moodle_dev_utils\http\filters\lhs\conditions\like_sql_condition;
 
-use linkisensei\moodle_dev_utils\http\filters\exception\invalid_operator_exception;
-use \linkisensei\moodle_dev_utils\http\filters\exceptions\context\filter_context;
+use moodle_dev_utils\http\filters\exception\invalid_operator_exception;
+use \moodle_dev_utils\http\filters\exceptions\context\filter_context;
 
 final class sql_conditions_factory {
 
     /**
-     * @throws linkisensei\moodle_dev_utils\http\exceptions\validation_exception
+     * @throws moodle_dev_utils\http\exceptions\validation_exception
      * @param string $operator_alias
      * @param string $field
      * @param mixed $value

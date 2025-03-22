@@ -1,4 +1,4 @@
-<?php namespace linkisensei\moodle_dev_utils\http\filters\interfaces;
+<?php namespace moodle_dev_utils\http\filters\interfaces;
 
 use \Psr\Http\Message\ServerRequestInterface;
 

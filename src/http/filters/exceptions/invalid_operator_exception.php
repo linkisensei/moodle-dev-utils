@@ -1,4 +1,4 @@
-<?php namespace linkisensei\moodle_dev_utils\http\filters\exceptions;
+<?php namespace moodle_dev_utils\http\filters\exceptions;
 
 class invalid_operator_exception extends operator_exception {
     

@@ -1,7 +1,7 @@
-<?php namespace linkisensei\moodle_dev_utils\database\query\pagination;
+<?php namespace moodle_dev_utils\database\query\pagination;
 
-use \linkisensei\moodle_dev_utils\database\query\interfaces\page_paginator_interface;
-use \linkisensei\moodle_dev_utils\database\query\moodle_query;
+use \moodle_dev_utils\database\query\interfaces\page_paginator_interface;
+use \moodle_dev_utils\database\query\moodle_query;
 
 class query_page_paginator implements page_paginator_interface {
     protected moodle_query $query;
