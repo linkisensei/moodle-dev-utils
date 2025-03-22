@@ -17,15 +17,13 @@ if (!file_exists($phpunit_bin)) {
     exit("Error: PHPUnit executable not found at path: $phpunit_bin\n");
 }
 
-// Your project's phpunit.xml file
 $phpunit_xml = realpath(__DIR__ . '/../phpunit.xml');
 
 if (!$phpunit_xml) {
     exit("Error: phpunit.xml file not found in the project's root.\n");
 }
 
-// Command execution
-$command = escapeshellcmd("$phpunit_bin -c \"$phpunit_xml\" " . __DIR__);
+$command = escapeshellcmd("php $phpunit_bin -c \"$phpunit_xml\"");
 
 passthru($command, $return_code);
 

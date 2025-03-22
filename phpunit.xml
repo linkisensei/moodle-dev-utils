@@ -2,7 +2,7 @@
 <phpunit bootstrap="tests/bootstrap.php">
     <testsuites>
         <testsuite name="moodle_dev_utils">
-            <directory suffix="_test.php">./tests/testcases</directory>
+            <directory suffix="_test.php">tests/testcases</directory>
         </testsuite>
     </testsuites>
 </phpunit>

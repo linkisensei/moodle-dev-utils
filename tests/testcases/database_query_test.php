@@ -1,6 +1,6 @@
 <?php
 
-use \advanced_testcase;
+// use \advanced_testcase;
 
 defined('MOODLE_INTERNAL') || die();
 
