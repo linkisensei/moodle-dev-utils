@@ -39,7 +39,9 @@ class sql_conditions_test extends advanced_testcase {
 
         $params = [];
         $condition->append_param($params);
-        $this->assertEquals(['name__eq' => 'john'], $params);
+
+        $placeholder = $this->make_placeholder('name', 'eq');
+        $this->assertEquals([$placeholder => 'john'], $params);
 
         $this->assertEquals('name', $condition->get_field());
         $this->assertEquals('eq', eq_sql_condition::get_alias());

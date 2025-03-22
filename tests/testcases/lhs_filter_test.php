@@ -18,6 +18,17 @@ use \GuzzleHttp\Psr7\ServerRequest;
 class lhs_filter_test extends advanced_testcase {
 
     /**
+     * Generates the expected param placeholder.
+     *
+     * @param string $field
+     * @param string $alias
+     * @return string
+     */
+    protected function make_placeholder(string $field, string $alias): string {
+        return "{$field}__{$alias}";
+    }
+
+    /**
      * Custom filter for testing.
      */
     protected function get_test_filter(array $params = []): lhs_filter {
@@ -45,9 +56,10 @@ class lhs_filter_test extends advanced_testcase {
         $sql = $filter->get_conditions('u');
         $params = $filter->get_parameters();
 
-        $this->assertStringContainsString('u.age > :age__gt', $sql);
-        $this->assertArrayHasKey('age__gt', $params);
-        $this->assertEquals(30, $params['age__gt']);
+        $placeholder = $this->make_placeholder('age', 'gt');
+        $this->assertStringContainsString("u.age > :{$placeholder}", $sql);
+        $this->assertArrayHasKey($placeholder, $params);
+        $this->assertEquals(30, $params[$placeholder]);
     }
 
     public function test_eq_operator_and_choices() {
@@ -56,8 +68,9 @@ class lhs_filter_test extends advanced_testcase {
         $sql = $filter->get_conditions('t');
         $params = $filter->get_parameters();
 
-        $this->assertStringContainsString('t.status = :status__eq', $sql);
-        $this->assertEquals('draft', $params['status__eq']);
+        $placeholder = $this->make_placeholder('status', 'eq');
+        $this->assertStringContainsString("t.status = :{$placeholder}", $sql);
+        $this->assertEquals('draft', $params[$placeholder]);
     }
 
     public function test_missing_required_field_throws_exception() {
@@ -109,7 +122,8 @@ class lhs_filter_test extends advanced_testcase {
         $sql = $filter->get_conditions();
         $params = $filter->get_parameters();
 
-        $this->assertStringContainsString('age = :age__eq', $sql);
-        $this->assertEquals(99, $params['age__eq']);
+        $placeholder = $this->make_placeholder('age', 'eq');
+        $this->assertStringContainsString("age = :{$placeholder}", $sql);
+        $this->assertEquals(99, $params[$placeholder]);
     }
 }
