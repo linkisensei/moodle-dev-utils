@@ -14,6 +14,7 @@ use \moodle_dev_utils\http\filters\exceptions\invalid_condition_value_exception;
 use \moodle_dev_utils\http\exceptions\validation_exception;
 use \moodle_dev_utils\http\filters\exceptions\invalid_operator_exception;
 use \moodle_dev_utils\http\filters\exceptions\context\filter_context;
+use \moodle_dev_utils\http\filters\lhs\conditions\in_sql_condition;
 
 /**
  * Tests for SQL condition classes and factory.
@@ -142,4 +143,34 @@ class sql_conditions_test extends advanced_testcase {
         $this->assertEquals("$field = :$placeholder", $condition->to_sql());
     }
     
+    public function test_in_condition_generates_correct_sql() {
+        $values = ['todo', 'open', 'inprogress'];
+        $condition = new \moodle_dev_utils\http\filters\lhs\conditions\in_sql_condition('status', $values);
+        $placeholder = $this->make_placeholder('status', 'in');
+        
+
+        $sql = $condition->to_sql();
+        $this->assertStringStartsWith("status ", $sql);
+        $this->assertStringContainsString("IN", $sql);
+
+        $this->assertStringContainsString($placeholder, $sql);
+
+        $this->assertEquals('todo,open,inprogress', $condition->get_value());
+        
+        $params = [];
+        $condition->append_param($params);
+
+        $this->assertCount(3, $params);
+        $this->assertArrayHasKey('status__in1', $params);
+        $this->assertArrayHasKey('status__in2', $params);
+        $this->assertArrayHasKey('status__in3', $params);
+        $this->assertEquals('todo', $params['status__in1']);
+        $this->assertEquals('open', $params['status__in2']);
+        $this->assertEquals('inprogress', $params['status__in3']);
+    }
+
+    public function test_in_condition_throws_exception_with_string_value() {
+        $this->expectException(invalid_condition_value_exception::class);
+        new in_sql_condition('status', null);
+    }
 }
