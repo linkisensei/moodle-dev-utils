@@ -116,8 +116,19 @@ class lhs_filter implements sql_filter_interface {
         return $this;
     }
 
+    /**
+     * Override this method to change the parameters before
+     * the filters initialization and validation.
+     *
+     * @param array $query_params (by reference)
+     * @return void
+     */
+    protected function before_validation(array &$query_params){}
+
     public function __construct(array $query_params = []){
         $default_operator = static::define_default_operator();
+
+        $this->before_validation($query_params);
 
         foreach ($query_params as $field => $values) {
             if(!is_array($values)){
