@@ -73,10 +73,10 @@ class query_cursor_paginator implements cursor_paginator_interface {
         $last_cursor = null;
         foreach ($recordset as $record){
             if($counter < $this->query->limit){
+                $last_cursor = $record?->$cursor_property;
                 yield $record;
             }
 
-            $last_cursor = $record?->$cursor_property;
             $counter++;
         }
         $recordset->close();
