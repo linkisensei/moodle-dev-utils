@@ -374,6 +374,12 @@ class moodle_query {
     public function first() : ?object {
         $query = clone $this;
         $recordset = $query->limit(1)->get_recordset();
+
+        if(!$recordset->valid()){
+            $recordset->close();
+            return null;
+        }
+
         $record = $recordset->current();
         $recordset->close();
         return $record ?: null;
