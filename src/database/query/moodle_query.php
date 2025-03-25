@@ -283,6 +283,15 @@ class moodle_query {
     }
 
     /**
+     * Returns all params as an associative array
+     *
+     * @return array
+     */
+    public function get_params(): array {
+        return $this->params;
+    }
+
+    /**
      * Set multiple parameters for prepared statements at once.
      *
      * @param array $params Associative array of parameters (key => value)
