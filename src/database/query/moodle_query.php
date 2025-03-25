@@ -121,7 +121,7 @@ class moodle_query {
      * @return static
      * @throws coding_exception if FROM clause is not set
      */
-    protected function join(string $type, string $table, string $on_condition, string $alias = ''): static {
+    public function join(string $type, string $table, string $on_condition, string $alias = ''): static {
         if (!$this->from) {
             throw new coding_exception("Cannot JOIN without FROM clause");
         }
