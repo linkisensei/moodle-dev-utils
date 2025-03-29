@@ -100,7 +100,7 @@ class lhs_filter implements sql_filter_interface {
         $definitions = $this->get_fields_definition();
         if(!empty($definitions) && isset($definitions[$field])){
             if(!in_array($operator_alias, $definitions[$field]['operators'])){
-                $ctx = new filter_context($field, $operator_alias);
+                $ctx = new filter_context($field, $operator_alias, $definitions[$field]['operators']);
                 throw forbidden_operator_exception::new()->set_context($ctx);
             }
 

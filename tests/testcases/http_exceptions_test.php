@@ -79,7 +79,7 @@ class http_exceptions_test extends advanced_testcase {
     }
 
     public function test_exception_context_can_be_set_fluently() {
-        $ctx = new filter_context('myfield', 'eq', ['a', 'b']);
+        $ctx = new filter_context('myfield', 'eq', ['eq'], ['a', 'b']);
         $ex = invalid_operator_exception::new()->set_context($ctx);
 
         $this->assertEquals($ctx, $ex->get_context());

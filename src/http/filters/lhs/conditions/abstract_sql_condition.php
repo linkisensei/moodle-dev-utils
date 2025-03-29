@@ -132,7 +132,7 @@ abstract class abstract_sql_condition implements sql_condition_interface {
             }
     
             if (!empty($choices) && !in_array($value, $choices)) {
-                $ctx = new filter_context($this->field, $this->get_alias(), $choices);
+                $ctx = new filter_context($this->field, $this->get_alias(), '', $choices);
                 throw invalid_condition_choice_exception::new()->set_context($ctx);
             }
     

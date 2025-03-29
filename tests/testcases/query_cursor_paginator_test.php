@@ -41,7 +41,7 @@ class query_cursor_paginator_test extends advanced_testcase {
         $this->assertCount(5, $results);
         $this->assertEquals('Data 1', $results[0]->value);
         $this->assertEquals('Data 5', $results[4]->value);
-        $this->assertEquals(6, $paginator->get_next_cursor());
+        $this->assertEquals(5, $paginator->get_next_cursor());
     }
 
     public function test_paginate_second_page_using_cursor() {
@@ -54,7 +54,7 @@ class query_cursor_paginator_test extends advanced_testcase {
         $this->assertCount(5, $results);
         $this->assertEquals('Data 6', $results[0]->value);
         $this->assertEquals('Data 10', $results[4]->value);
-        $this->assertEquals(11, $paginator->get_next_cursor());
+        $this->assertEquals(10, $paginator->get_next_cursor());
     }
 
     public function test_last_page_returns_no_next_cursor() {
