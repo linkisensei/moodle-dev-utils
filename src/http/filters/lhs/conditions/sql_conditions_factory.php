@@ -11,6 +11,7 @@ use \moodle_dev_utils\http\filters\lhs\conditions\isnull_sql_condition;
 use \moodle_dev_utils\http\filters\lhs\conditions\notnull_sql_condition;
 use \moodle_dev_utils\http\filters\lhs\conditions\like_sql_condition;
 use \moodle_dev_utils\http\filters\lhs\conditions\notlike_sql_condition;
+use \moodle_dev_utils\http\filters\lhs\conditions\in_sql_condition;
 
 use moodle_dev_utils\http\filters\exceptions\invalid_operator_exception;
 use \moodle_dev_utils\http\filters\exceptions\context\filter_context;
@@ -36,6 +37,7 @@ final class sql_conditions_factory {
             notnull_sql_condition::get_alias() => notnull_sql_condition::class,
             like_sql_condition::get_alias()  => like_sql_condition::class,
             notlike_sql_condition::get_alias()  => notlike_sql_condition::class,
+            in_sql_condition::get_alias()  => in_sql_condition::class,
             default                    => null,
         };
 
