@@ -32,6 +32,29 @@ class sql_conditions_test extends advanced_testcase {
         return "{$field}__{$alias}";
     }
 
+    /**
+     * Helper class to test wildcard_trait.
+     */
+    protected static function get_wildcard_trait_tester(): object {
+        return new class {
+            use \moodle_dev_utils\http\filters\lhs\conditions\traits\wildcard_trait;
+        };
+    }
+
+    public function test_normalize_wildcards(): void {
+        $trait = self::get_wildcard_trait_tester();
+
+        $this->assertSame(null, $trait->normalize_wildcards(null));
+        $this->assertSame('', $trait->normalize_wildcards(''));
+        $this->assertSame('name', $trait->normalize_wildcards('name'));
+        $this->assertSame('n%me', $trait->normalize_wildcards('n*me'));
+        $this->assertSame('%name%', $trait->normalize_wildcards('*name*'));
+        $this->assertSame('%name\_01%', $trait->normalize_wildcards('*name_01*'));
+        $this->assertSame('%test\%case%', $trait->normalize_wildcards('*test%case*'));
+        $this->assertSame('file\_path\_v1', $trait->normalize_wildcards('file_path_v1'));
+        $this->assertSame('a%b\_c\%d\\\\e', $trait->normalize_wildcards('a*b_c%d\e'));
+    }
+
     public function test_eq_condition_generates_correct_sql() {
         $condition = new eq_sql_condition('name', 'john');
 
@@ -114,7 +137,7 @@ class sql_conditions_test extends advanced_testcase {
         $alias = 'like';
         $placeholder = $this->make_placeholder($field, $alias);
     
-        $condition = new like_sql_condition($field, '%doe%');
+        $condition = new like_sql_condition($field, '*doe*');
     
         $this->assertEquals('LIKE', $condition->get_operator());
         $sql = $condition->to_sql();
