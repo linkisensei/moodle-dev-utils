@@ -29,7 +29,7 @@ class notlike_sql_condition extends abstract_sql_condition {
         global $DB;
 
         if(!isset($this->sql)){
-            $this->sql = $DB->sql_like($this->field, ":$this->key", true, true, true);
+            $this->sql = $DB->sql_like($this->field, ":$this->key", false, false, true);
         }
         return empty($table) ? $this->sql : $table . "." . $this->sql;
     }
