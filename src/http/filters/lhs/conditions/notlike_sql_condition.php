@@ -8,11 +8,11 @@ class notlike_sql_condition extends abstract_sql_condition {
     use wildcard_trait;
 
     public function __construct(string $field, mixed $value = null){
+        $value = $this->normalize_wildcards($value);
+
         $this->key = $field . '__' . static::get_alias();
         $this->value = $value;
         $this->field = $field;
-
-        $value = $this->normalize_wildcards($value);
 
         if(!str_contains($value, '%')){
             throw invalid_condition_value_exception::new()->set_context($this->get_context());
