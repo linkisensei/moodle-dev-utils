@@ -196,4 +196,64 @@ class sql_conditions_test extends advanced_testcase {
         $this->expectException(invalid_condition_value_exception::class);
         new in_sql_condition('status', null);
     }
+
+    // ----------------------------
+    // Tests for in_sql_condition::validate_param
+    // ----------------------------
+
+    public function test_in_condition_validate_param_with_param_raw(): void {
+        $condition = new in_sql_condition('username', 'admin,user');
+        $condition->validate_param(PARAM_RAW);
+
+        $this->assertEquals('admin,user', $condition->get_value());
+    }
+
+    public function test_in_condition_validate_param_with_param_int(): void {
+        $condition = new in_sql_condition('ids', [1, 2, 3]);
+        $condition->validate_param(PARAM_INT);
+
+        $this->assertEquals('1,2,3', $condition->get_value());
+    }
+
+    public function test_in_condition_validate_param_with_param_int_throws(): void {
+        $this->expectException(validation_exception::class);
+
+        $condition = new in_sql_condition('ids', ['abc', 'def']);
+        $condition->validate_param(PARAM_INT);
+    }
+
+    public function test_in_condition_validate_param_with_param_bool(): void {
+        $condition = new in_sql_condition('flags', [true, false]);
+        $condition->validate_param(PARAM_BOOL);
+
+        $this->assertEquals('1,0', $condition->get_value());
+    }
+
+    public function test_in_condition_validate_param_with_enum_choices(): void {
+        $condition = new in_sql_condition('status', ['active', 'pending']);
+        $condition->validate_param(PARAM_ALPHANUMEXT, false, null, ['active', 'pending', 'disabled']);
+
+        $this->assertEquals('active,pending', $condition->get_value());
+    }
+
+    public function test_in_condition_validate_param_enum_throws(): void {
+        $this->expectException(invalid_condition_choice_exception::class);
+
+        $condition = new in_sql_condition('status', ['active', 'invalid']);
+        $condition->validate_param(PARAM_ALPHANUMEXT, false, null, ['active', 'pending', 'disabled']);
+    }
+
+    public function test_in_condition_validate_param_required_throws(): void {
+        $this->expectException(missing_required_field_exception::class);
+
+        $condition = new in_sql_condition('value', [null]);
+        $condition->validate_param(PARAM_TEXT, true);
+    }
+
+    public function test_in_condition_validate_param_with_default(): void {
+        $condition = new in_sql_condition('value', [null]);
+        $condition->validate_param(PARAM_TEXT, true, 'default_value');
+
+        $this->assertEquals('default_value', $condition->get_value());
+    }
 }

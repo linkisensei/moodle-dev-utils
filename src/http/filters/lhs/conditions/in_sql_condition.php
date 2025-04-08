@@ -1,6 +1,11 @@
 <?php namespace moodle_dev_utils\http\filters\lhs\conditions;
 
+use \moodle_dev_utils\http\filters\exceptions\context\filter_context;
+use \moodle_dev_utils\http\filters\exceptions\invalid_condition_choice_exception;
 use \moodle_dev_utils\http\filters\exceptions\invalid_condition_value_exception;
+use \moodle_dev_utils\http\filters\exceptions\missing_required_field_exception;
+use \invalid_parameter_exception;
+use \moodle_dev_utils\http\exceptions\validation_exception;
 
 class in_sql_condition extends abstract_sql_condition {
 
@@ -68,4 +73,52 @@ class in_sql_condition extends abstract_sql_condition {
         return 'IN';
     }
 
+
+     /**
+     * Validates the parameter value and updates its with
+     * a cleaned version
+     *
+     * @throws moodle_dev_utils\http\exceptions\validation_exception
+     * @throws moodle_dev_utils\http\filters\exceptions\invalid_condition_choice_exception
+     * @throws moodle_dev_utils\http\filters\exceptions\missing_required_field_exception
+     * @param string $type like PARAM_RAW, PARAM_INT etc
+     * @param bool $required
+     * @param mixed $default
+     * @param array|null $choices Like ENUM
+     * @return void
+     */
+    public function validate_param(string $type, bool $required = false, mixed $default = null, ?array $choices = []){
+        foreach ($this->params as &$value) {
+            try {   
+                if($value === null && $required && $default === null){
+                    $ctx = $this->get_context();
+                    throw missing_required_field_exception::new()->set_context($ctx);
+                }
+        
+                if($value === null && $required && $default !== null){
+                    $value = $default;
+                }
+        
+                if($type === PARAM_BOOL && $value === false){
+                    $value = 0; // Validate_param() does not like false with PARAM_BOOL
+                }
+        
+                if($type === PARAM_CLEANHTML){
+                    $value = clean_param($value, PARAM_CLEANHTML);
+                }
+        
+                if (!empty($choices) && !in_array($value, $choices)) {
+                    $ctx = new filter_context($this->field, $this->get_alias(), '', $choices);
+                    throw invalid_condition_choice_exception::new()->set_context($ctx);
+                }
+        
+                $value = validate_param($value, $type, !$required) ?? $default;
+    
+            } catch (invalid_parameter_exception $ex) {
+                throw new validation_exception($ex->getMessage());
+            }
+
+            $this->value = implode(',', $this->params);
+        }
+    }
 }

@@ -1,8 +1,8 @@
 <?php namespace moodle_dev_utils\http\filters\lhs\conditions;
 
 use \invalid_parameter_exception;
-use moodle_dev_utils\http\exceptions\validation_exception;
-use moodle_dev_utils\http\filters\exceptions\invalid_condition_choice_exception;
+use \moodle_dev_utils\http\exceptions\validation_exception;
+use \moodle_dev_utils\http\filters\exceptions\invalid_condition_choice_exception;
 use \moodle_dev_utils\http\filters\exceptions\missing_required_field_exception;
 use \moodle_dev_utils\http\filters\exceptions\context\filter_context;
 
