@@ -15,8 +15,8 @@ class lhs_filter_structure extends external_single_structure {
         parent::__construct($fields, $desc, VALUE_DEFAULT, []);
     }
 
-    public function add_filter(string $key, string $type, array $operators = []) : static {
-        $desc = $this->make_filter_description($key, $type, $operators);
+    public function add_filter_field(string $key, string $type, array $operators = []) : static {
+        $desc = $this->make_filter_field_description($key, $type, $operators);
         $this->keys[$key] = new lhs_filter_field_structure($operators, $desc, $type);
         return $this;
     }
@@ -29,7 +29,7 @@ class lhs_filter_structure extends external_single_structure {
      * @param array $operators
      * @return string
      */
-    public function make_filter_description(string $key, string $type, array $operators = []) : string {
+    public function make_filter_field_description(string $key, string $type, array $operators = []) : string {
         return "Supported operators: " . implode(',', $operators);
     }
 }

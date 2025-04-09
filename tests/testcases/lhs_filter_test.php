@@ -227,7 +227,7 @@ class lhs_filter_test extends advanced_testcase {
         
             public function to_external_description(): lhs_filter_structure {
                 return new class extends lhs_filter_structure {
-                    public function make_filter_description(string $key, string $type, array $operators = []): string {
+                    public function make_filter_field_description(string $key, string $type, array $operators = []): string {
                         return "Operators for {$key}: " . implode('|', $operators);
                     }
                 };
@@ -235,7 +235,7 @@ class lhs_filter_test extends advanced_testcase {
         };
     
         $description = $filter->to_external_description();
-        $field = $description->add_filter('score', PARAM_FLOAT, ['gt', 'eq'])->keys['score'];
+        $field = $description->add_filter_field('score', PARAM_FLOAT, ['gt', 'eq'])->keys['score'];
         
         $this->assertStringContainsString('Operators for score:', $field->desc);
     }

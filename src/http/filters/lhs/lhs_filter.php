@@ -177,7 +177,7 @@ class lhs_filter implements sql_filter_interface {
         $structure = new lhs_filter_structure();
 
         foreach($this->get_fields_definition() as $key => $definition){
-            $structure->add_filter($key, $definition['type'], $definition['operators']);
+            $structure->add_filter_field($key, $definition['type'], $definition['operators']);
         }
 
         return $structure;
