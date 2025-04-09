@@ -12,6 +12,9 @@ use \moodle_dev_utils\http\filters\lhs\conditions\gt_sql_condition;
 use \moodle_dev_utils\http\filters\lhs\conditions\sql_conditions_factory;
 use \GuzzleHttp\Psr7\ServerRequest;
 
+use \moodle_dev_utils\http\filters\lhs\external\lhs_filter_structure;
+use \moodle_dev_utils\http\filters\lhs\external\lhs_filter_field_structure;
+
 /**
  * Tests for lhs_filter.
  */
@@ -180,4 +183,60 @@ class lhs_filter_test extends advanced_testcase {
         $this->assertEquals(1, $instance2->get_define_field_calls_count(), "Instance2 should have reused the definition of instance1");
     }
 
+
+    public function test_to_external_description_returns_correct_structure() {
+        $filter = $this->get_test_filter();
+    
+        $description = $filter->to_external_description();
+    
+        $this->assertInstanceOf(lhs_filter_structure::class, $description);
+    
+        $fields = $description->keys;
+        $this->assertArrayHasKey('age', $fields);
+        $this->assertArrayHasKey('status', $fields);
+    
+        $this->assertInstanceOf(lhs_filter_field_structure::class, $fields['age']);
+        $this->assertInstanceOf(lhs_filter_field_structure::class, $fields['status']);
+    }
+    
+    public function test_to_external_description_contains_expected_operators() {
+        $filter = $this->get_test_filter();
+        $description = $filter->to_external_description();
+    
+        /** @var lhs_filter_field_structure $age */
+        $age = $description->keys['age'];
+        $this->assertArrayHasKey('gt', $age->keys);
+        $this->assertArrayHasKey('eq', $age->keys);
+    
+        /** @var lhs_filter_field_structure $status */
+        $status = $description->keys['status'];
+        $this->assertArrayHasKey('eq', $status->keys);
+        $this->assertArrayNotHasKey('gt', $status->keys);
+    }
+    
+    public function test_to_external_description_supports_custom_description() {
+        $filter = new class([]) extends lhs_filter {
+            protected function define_fields(): array {
+                return [
+                    'score' => [
+                        'type' => PARAM_FLOAT,
+                        'operators' => ['gt', 'eq']
+                    ]
+                ];
+            }
+        
+            public function to_external_description(): lhs_filter_structure {
+                return new class extends lhs_filter_structure {
+                    public function make_filter_description(string $key, string $type, array $operators = []): string {
+                        return "Operators for {$key}: " . implode('|', $operators);
+                    }
+                };
+            }
+        };
+    
+        $description = $filter->to_external_description();
+        $field = $description->add_filter('score', PARAM_FLOAT, ['gt', 'eq'])->keys['score'];
+        
+        $this->assertStringContainsString('Operators for score:', $field->desc);
+    }
 }

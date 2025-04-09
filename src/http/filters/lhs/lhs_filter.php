@@ -7,6 +7,7 @@ use \moodle_dev_utils\http\filters\lhs\conditions\eq_sql_condition;
 use \moodle_dev_utils\http\filters\lhs\conditions\sql_conditions_factory;
 use \moodle_dev_utils\http\filters\exceptions\forbidden_operator_exception;
 use \moodle_dev_utils\http\filters\exceptions\context\filter_context;
+use \moodle_dev_utils\http\filters\lhs\external\lhs_filter_structure;
 
 /**
  * Parses LHS Bracket filters and transforms them into
@@ -164,5 +165,21 @@ class lhs_filter implements sql_filter_interface {
 
     public function has_conditions() : bool {
         return !empty($this->conditions);
+    }
+
+    /**
+     * Makes a external_definition structure that contains
+     * all fields and its operators.
+     *
+     * @return \moodle_dev_utils\http\filters\lhs\external\lhs_filter_structure
+     */
+    public function to_external_description() : lhs_filter_structure {
+        $structure = new lhs_filter_structure();
+
+        foreach($this->get_fields_definition() as $key => $definition){
+            $structure->add_filter($key, $definition['type'], $definition['operators']);
+        }
+
+        return $structure;
     }
 }
