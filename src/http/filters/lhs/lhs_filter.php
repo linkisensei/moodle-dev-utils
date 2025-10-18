@@ -182,4 +182,41 @@ class lhs_filter implements sql_filter_interface {
 
         return $structure;
     }
+
+    /**
+     * Like get_conditions, but only returns the conditions
+     * related to a specific field of this filter.
+     *
+     * @param string $field
+     * @param string $table table name or alias
+     * @return string
+     */
+    public function get_conditions_by_field(string $field, string $table = '') : string {
+        $conditions = [];
+
+        foreach ($this->conditions as $condition) {
+            if($condition->get_field() == $field){
+                $conditions[] = $condition->to_sql($table);
+            }
+        }
+
+        return implode(' AND ', $conditions);
+    }
+
+    /**
+     * Like get_parameters, but only returns parameters
+     * related to a specific field of this filter.
+     *
+     * @param string $field
+     * @return string
+     */
+    public function get_parameters_by_field(string $field) : array {
+        $params = [];
+        foreach ($this->conditions as $condition) {
+            if($condition->get_field() == $field){
+                $condition->append_param($params);
+            }
+        }
+        return $params;
+    }
 }
