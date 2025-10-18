@@ -112,6 +112,18 @@ class moodle_query {
     }
 
     /**
+     * Set FROM clause using a subquery
+     *
+     * @param string $table
+     * @param string $alias
+     * @return static
+     */
+    public function from_subquery(string $subsql, string $alias): static {
+        $this->from = "($subsql) $alias";
+        return $this;
+    }
+
+    /**
      * Add JOIN clause
      *
      * @param string $type JOIN type (INNER, LEFT, RIGHT)
@@ -126,6 +138,24 @@ class moodle_query {
             throw new coding_exception("Cannot JOIN without FROM clause");
         }
         $this->joins[] = "$type JOIN {{$table}} $alias ON ($on_condition)";
+        return $this;
+    }
+
+    /**
+     * Add JOIN clause containing a subquery
+     *
+     * @param string $type JOIN type (INNER, LEFT, RIGHT)
+     * @param string $sql subquery's SQL
+     * @param string $alias
+     * @param string $on_condition ON condition for join
+     * @return static
+     * @throws coding_exception if FROM clause is not set
+     */
+    public function join_subquery(string $type, string $sql, string $alias, string $on_condition): static {
+        if (!$this->from) {
+            throw new coding_exception("Cannot JOIN without FROM clause");
+        }
+        $this->joins[] = "$type JOIN ($sql) $alias ON ($on_condition)";
         return $this;
     }
 
