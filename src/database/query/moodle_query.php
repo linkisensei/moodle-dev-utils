@@ -388,8 +388,15 @@ class moodle_query {
      */
     public function count(): int {
         $query = clone $this;
-        $query->select('COUNT(1)', true);
-        $query->limit(0, 0);
+        $query->reset_order_by();
+
+        if ($query->distinct || !empty($query->group_by) || !empty($query->having)) {
+            $innersql = $query->to_sql();
+            $sql = "SELECT COUNT(1) FROM ($innersql) qcnt";
+            return $this->db->count_records_sql($sql, $query->params);
+        }
+
+        $query->reset_select()->select('COUNT(1)');
         return $this->db->count_records_sql($query->to_sql(), $query->params);
     }
 
